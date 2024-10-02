@@ -16,13 +16,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Weather"),
+      ),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _buildSearchWidget(),
+            SearchBar(
+              padding: WidgetStatePropertyAll(const EdgeInsets.symmetric(horizontal: 18)),
+              leading: Icon(Icons.search),
+              hintText: "Search City",
+              elevation: WidgetStateProperty.all(0),
+              onSubmitted: (value) {
+                ///TODO : validate the input
+                _getWeatherData(value);
+              },
+            ),
             const SizedBox(height: 20),
             if (inProgress)
               CircularProgressIndicator()
@@ -32,15 +43,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    ));
-  }
-
-  Widget _buildSearchWidget() {
-    return SearchBar(
-      hintText: "ENTER CITY",
-      onSubmitted: (value) {
-        _getWeatherData(value);
-      },
     );
   }
 
