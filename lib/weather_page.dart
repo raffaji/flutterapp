@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:test_1/map_screen.dart';
 import 'package:test_1/weather/ui/weather_ui.dart';
-import 'homepage.dart';
+import 'package:test_1/weatherui.dart';
+
 
 void main() async {
   // Ensure Flutter initializes before loading the environment variables
@@ -86,18 +86,21 @@ class Home extends StatelessWidget {
         ),
         body: Column(
           children: [
-            ///TODO: Add a Icons and description for each ListTile
             Container(
               margin: EdgeInsets.all(10),
               child: ListTile(
+                trailing: Icon(Icons.adaptive.arrow_forward_outlined),
+                leading: Icon(Icons.cloud),
+                subtitle:Text('Tap to open waether forcast'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                tileColor: Theme.of(context).colorScheme.secondaryContainer,
+                tileColor: Platform.isIOS
+                    ? CupertinoColors.secondarySystemFill
+                :Theme.of(context).colorScheme.secondaryContainer,
                 title: Text('Weather'),
                 onTap: () {
-                  ///TODO: rename HomePage to WeatherPage and homepage.dart to weather_page.dart
-                  Navigator.push(
+                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
                   );
@@ -110,7 +113,6 @@ class Home extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                ///TODO: use Platform.isIOS to set the tileColor
                 tileColor: Platform.isIOS
                     ? CupertinoColors.secondarySystemFill
                     : Theme.of(context).colorScheme.secondaryContainer,
@@ -133,7 +135,9 @@ class Home extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                tileColor: Theme.of(context).colorScheme.secondaryContainer,
+                tileColor: Platform.isIOS
+                    ? CupertinoColors.secondarySystemFill
+                :Theme.of(context).colorScheme.secondaryContainer,
                 leading: Icon(Icons.thermostat_outlined),
                 title: Text('Weather Cubit Example'),
                 subtitle: Text('Tap to open the Map screen'),
