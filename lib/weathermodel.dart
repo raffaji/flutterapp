@@ -6,19 +6,19 @@ class ApiResponse {
 
   ApiResponse.fromJson(Map<String, dynamic> json) {
     location = json['location'] != null
-        ? new Location.fromJson(json['location'])
+        ? Location.fromJson(json['location'])
         : null;
     current =
-        json['current'] != null ? new Current.fromJson(json['current']) : null;
+        json['current'] != null ? Current.fromJson(json['current']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.location != null) {
-      data['location'] = this.location!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (location != null) {
+      data['location'] = location!.toJson();
     }
-    if (this.current != null) {
-      data['current'] = this.current!.toJson();
+    if (current != null) {
+      data['current'] = current!.toJson();
     }
     return data;
   }
@@ -38,10 +38,10 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['country'] = this.country;
-    data['localtime'] = this.localtime;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['country'] = country;
+    data['localtime'] = localtime;
     return data;
   }
 }
@@ -68,7 +68,7 @@ class Current {
     tempC = json['temp_c'];
     isDay = json['is_day'];
     condition = json['condition'] != null
-        ? new Condition.fromJson(json['condition'])
+        ? Condition.fromJson(json['condition'])
         : null;
     windKph = json['wind_kph'];
     precipMm = json['precip_mm'];
@@ -77,16 +77,16 @@ class Current {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['temp_c'] = this.tempC;
-    data['is_day'] = this.isDay;
-    if (this.condition != null) {
-      data['condition'] = this.condition!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['temp_c'] = tempC;
+    data['is_day'] = isDay;
+    if (condition != null) {
+      data['condition'] = condition!.toJson();
     }
-    data['wind_kph'] = this.windKph;
-    data['precip_mm'] = this.precipMm;
-    data['humidity'] = this.humidity;
-    data['uv'] = this.uv;
+    data['wind_kph'] = windKph;
+    data['precip_mm'] = precipMm;
+    data['humidity'] = humidity;
+    data['uv'] = uv;
     return data;
   }
 }
@@ -105,10 +105,10 @@ class Condition {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['text'] = this.text;
-    data['icon'] = this.icon;
-    data['code'] = this.code;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['text'] = text;
+    data['icon'] = icon;
+    data['code'] = code;
     return data;
   }
 }

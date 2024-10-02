@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';  // Correct package import
-import 'package:latlong2/latlong.dart';        // Correct coordinates import
+import 'package:flutter_map/flutter_map.dart'; // Correct package import
+import 'package:latlong2/latlong.dart'; // Correct coordinates import
 import 'constants.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
-  _MapScreenState createState() => _MapScreenState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
@@ -22,24 +23,23 @@ class _MapScreenState extends State<MapScreen> {
     if (response.statusCode == 200) {
       // Parse the weather data
       final weatherData = response.body; // You might want to decode this
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Weather Info'),
-            content: Text(weatherData), // Display raw data for now
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('Close'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Handle the error
-      print('Failed to load weather data');
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Weather Info'),
+              content: Text(weatherData), // Display raw data for now
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -55,7 +55,7 @@ class _MapScreenState extends State<MapScreen> {
       body: FlutterMap(
         options: MapOptions(
           center: LatLng(51.5, -0.09), // Default map center
-          zoom: 10.0,                  // Initial zoom level
+          zoom: 10.0, // Initial zoom level
           onTap: (tapPosition, point) {
             // Call fetchWeather when tapping on the map
             fetchWeather(point);

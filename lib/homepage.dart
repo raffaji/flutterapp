@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  (response?.current?.tempC.toString() ?? "") + " °c",
+                  "${response?.current?.tempC.toString() ?? ""} °c",
                   style: const TextStyle(
                     fontSize: 60,
                     fontWeight: FontWeight.bold,
