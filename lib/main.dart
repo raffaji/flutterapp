@@ -1,13 +1,18 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:test_1/map_screen.dart';
-
 import 'homepage.dart';
 
 
- void main() => runApp(MyApp());
-
+ void main()async {
+  // Ensure Flutter initializes before loading the environment variables
+  WidgetsFlutterBinding.ensureInitialized(); 
+  // Load the .env file
+  await dotenv.load(fileName: ".env");
+ runApp(MyApp());
+ }
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
