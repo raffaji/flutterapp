@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:test_1/map_screen.dart';
+import 'package:test_1/theme_cubit.dart';
 import 'package:test_1/weather/ui/weather_ui.dart';
 import 'package:test_1/weatherui.dart';
-
 
 void main() async {
   // Ensure Flutter initializes before loading the environment variables
@@ -27,131 +28,120 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false;
-
-  void toggleDarkMode() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    ///TODO add a dark mode button on the app with cubit
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.dark,
-          seedColor: Colors.tealAccent,
-        ),
-        useMaterial3: true,
-      ),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.tealAccent,
-        ),
-        useMaterial3: true,
-      ),
-      home: DefaultTabController(
-        length: 2, // Number of tabs
-        child: Home(
-          toggleDarkMode: toggleDarkMode,
-        ),
+    return BlocProvider(
+      create: (context) => ThemeCubit(), // Initialize ThemeCubit
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (context, theme) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            theme: theme, // Use the current theme provided by ThemeCubit
+            home: DefaultTabController(
+              length: 2, // Number of tabs
+              child: Home(),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
 class Home extends StatelessWidget {
-  const Home({super.key, required this.toggleDarkMode});
-
-  final void Function()? toggleDarkMode;
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Test App'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                toggleDarkMode!();
+      appBar: AppBar(
+        title: const Text('Test App'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<ThemeCubit>().toggletheme();
+            },
+            icon: Icon(
+              context.watch<ThemeCubit>().state.brightness == Brightness.dark
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              trailing: Icon(Icons.adaptive.arrow_forward_outlined),
+              leading: const Icon(Icons.cloud),
+              subtitle: const Text('Tap to open weather forecast'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              tileColor: Platform.isIOS
+                  ? CupertinoColors.secondarySystemFill
+                  : Theme.of(context).colorScheme.secondaryContainer,
+              title: const Text('Weather'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage()), // Your HomePage widget
+                );
               },
-              icon: Icon(Icons.light_mode),
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ListTile(
-                trailing: Icon(Icons.adaptive.arrow_forward_outlined),
-                leading: Icon(Icons.cloud),
-                subtitle:Text('Tap to open waether forcast'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                tileColor: Platform.isIOS
-                    ? CupertinoColors.secondarySystemFill
-                :Theme.of(context).colorScheme.secondaryContainer,
-                title: Text('Weather'),
-                onTap: () {
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                },
+          ),
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
+              tileColor: Platform.isIOS
+                  ? CupertinoColors.secondarySystemFill
+                  : Theme.of(context).colorScheme.secondaryContainer,
+              leading: const Icon(Icons.map),
+              title: const Text('Map'),
+              subtitle: const Text('Tap to open the Map screen'),
+              trailing: Icon(Icons.adaptive.arrow_forward_outlined),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MapScreen()), // Your MapScreen widget
+                );
+              },
             ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                tileColor: Platform.isIOS
-                    ? CupertinoColors.secondarySystemFill
-                    : Theme.of(context).colorScheme.secondaryContainer,
-                leading: Icon(Icons.map),
-                title: Text('Map'),
-                subtitle: Text('Tap to open the Map screen'),
-                // trailing: Icon(Icons.arrow_forward_ios),
-                trailing: Icon(Icons.adaptive.arrow_forward_outlined),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MapScreen()),
-                  );
-                },
+          ),
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
+              tileColor: Platform.isIOS
+                  ? CupertinoColors.secondarySystemFill
+                  : Theme.of(context).colorScheme.secondaryContainer,
+              leading: const Icon(Icons.thermostat_outlined),
+              title: const Text('Weather Cubit Example'),
+              subtitle: const Text('Tap to open the weather cubit screen'),
+              trailing: Icon(Icons.adaptive.arrow_forward_outlined),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          WeatherUI()), // Your WeatherUI widget
+                );
+              },
             ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                tileColor: Platform.isIOS
-                    ? CupertinoColors.secondarySystemFill
-                :Theme.of(context).colorScheme.secondaryContainer,
-                leading: Icon(Icons.thermostat_outlined),
-                title: Text('Weather Cubit Example'),
-                subtitle: Text('Tap to open the Map screen'),
-                // trailing: Icon(Icons.arrow_forward_ios),
-                trailing: Icon(Icons.adaptive.arrow_forward_outlined),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WeatherUI()),
-                  );
-                },
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
