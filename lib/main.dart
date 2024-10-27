@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:test_1/map_screen.dart';
@@ -9,6 +11,11 @@ import 'package:test_1/weather/ui/weather_ui.dart';
 import 'package:test_1/weatherui.dart';
 
 void main() async {
+  /// For firebase
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // Ensure Flutter initializes before loading the environment variables
   WidgetsFlutterBinding.ensureInitialized();
   // Load the .env file
@@ -40,7 +47,7 @@ class _MyAppState extends State<MyApp> {
             theme: theme, // Use the current theme provided by ThemeCubit
             home: DefaultTabController(
               length: 2, // Number of tabs
-              child: Home(),
+              child: WeatherPage(),
             ),
           );
         },
@@ -49,8 +56,8 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class WeatherPage extends StatelessWidget {
+  const WeatherPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +96,7 @@ class Home extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HomePage()), // Your HomePage widget
+                      builder: (context) => HomePage()),
                 );
               },
             ),
@@ -112,7 +119,7 @@ class Home extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MapScreen()), // Your MapScreen widget
+                          MapScreen()), 
                 );
               },
             ),
@@ -135,7 +142,7 @@ class Home extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          WeatherUI()), // Your WeatherUI widget
+                          WeatherUI()), 
                 );
               },
             ),
