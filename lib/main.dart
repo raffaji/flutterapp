@@ -9,21 +9,24 @@ import 'package:test_1/map_screen.dart';
 import 'package:test_1/theme_cubit.dart';
 import 'package:test_1/weather/ui/weather_ui.dart';
 import 'package:test_1/weatherui.dart';
+import 'package:test_1/UI/bloc_ui.dart';
 
 void main() async {
-  /// For firebase
-   WidgetsFlutterBinding.ensureInitialized();
+  // Ensure Flutter initializes before loading Firebase and environment variables
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Ensure Flutter initializes before loading the environment variables
-  WidgetsFlutterBinding.ensureInitialized();
+
   // Load the .env file
   try {
     await dotenv.load(fileName: ".env");
   } catch (e, stackTrace) {
-    debugPrint("${e.toString()} $stackTrace");
+    debugPrint("Error loading .env file: ${e.toString()} $stackTrace");
   }
+
   runApp(MyApp());
 }
 
@@ -124,7 +127,7 @@ class WeatherPage extends StatelessWidget {
               },
             ),
           ),
-          Container(
+           Container(
             margin: const EdgeInsets.all(10),
             child: ListTile(
               shape: RoundedRectangleBorder(
@@ -140,15 +143,35 @@ class WeatherPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          WeatherUI()), 
+                  MaterialPageRoute(builder: (context) => WeatherUI()),
                 );
               },
             ),
           ),
+         Container(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              tileColor: Platform.isIOS
+                  ? CupertinoColors.secondarySystemFill
+                  : Theme.of(context).colorScheme.secondaryContainer,
+              leading: const Icon(Icons.thermostat_outlined),
+              title: const Text('Weather Bloc Example'),
+              subtitle: const Text('Tap to open the weather bloc screen'),
+              trailing: Icon(Icons.adaptive.arrow_forward_outlined),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>BlocTile()),
+                );
+              },
+            ),
+          ), 
         ],
       ),
     );
   }
 }
+          
