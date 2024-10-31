@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'Pages/widget_tree.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,8 +15,8 @@ import 'package:test_1/UI/bloc_ui.dart';
 void main() async {
   // Ensure Flutter initializes before loading Firebase and environment variables
   WidgetsFlutterBinding.ensureInitialized();
-
   // Initialize Firebase
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
             home: DefaultTabController(
               length: 2, // Number of tabs
               child: WeatherPage(),
+              
             ),
           );
         },
@@ -157,7 +159,7 @@ class WeatherPage extends StatelessWidget {
               tileColor: Platform.isIOS
                   ? CupertinoColors.secondarySystemFill
                   : Theme.of(context).colorScheme.secondaryContainer,
-              leading: const Icon(Icons.thermostat_outlined),
+              leading: const Icon(Icons.cloud_circle),
               title: const Text('Weather Bloc Example'),
               subtitle: const Text('Tap to open the weather bloc screen'),
               trailing: Icon(Icons.adaptive.arrow_forward_outlined),
