@@ -1,45 +1,108 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'auth.dart';
-class HomePage  extends StatelessWidget{
-   HomePage({super.key});
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:test_1/Pages/auth.dart';
+import 'package:test_1/Pages/email_auth_page.dart';
+import 'package:test_1/main.dart';
 
- final User ? user= Auth().currentuser;
- 
- Future<void> signOut() async{
-  await Auth().signOut();
-}
- 
- Widget _title(){
-  return const Text('Firebase auth');
+class HomeScreen extends StatelessWidget {
+  final Auth _authService = Auth();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
- }
- Widget _userid(){
-  return Text( user?.email ?? 'USER EMAIL');
- }
- Widget _signOutButton(){
-  return ElevatedButton(onPressed: signOut,
-   child: const Text('Sign Out'));
- }
-@override
+  HomeScreen({super.key});
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
-      title: _title(),
-     ),
-     body: Container(
-      height: double.infinity,
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _userid(),
-          _signOutButton(),
-        ],
+      appBar: AppBar(title: Text('Firebase Auth')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                User? user = await _authService.signInWithEmail(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                if (user != null) {
+                  // Save user email to shared preferences
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('email', _emailController.text);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WeatherPage()), // Replace with your target screen
+                  );
+                }
+              },
+              child: Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                User? user = await _authService.registerWithEmail(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                if (user != null) {
+                  // Save user email to shared preferences
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('email', _emailController.text);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WeatherPage()), // Replace with your target screen
+                  );
+                }
+              },
+              child: Text('Register'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                User? user = await _authService.registerWithEmail(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                if (user != null) {
+                  // Save user email to shared preferences
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('email', _emailController.text);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WeatherPage()), // Replace with your target screen
+                  );
+                }
+              },
+              child: Text('Register'),
+            ),
+            SizedBox(height: 20),
+            // Button to navigate to EmailAuthPage
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmailAuthPage()),
+                );
+              },
+              child: Text('Use Email Link Authentication'),
+            ),
+          ],
+        ),
       ),
-     ),
     );
+  }
 }
-}
+        
+

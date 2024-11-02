@@ -7,30 +7,40 @@ class Auth {
 
   Stream <User?> get authStatechanges => _firebaseAuth.authStateChanges();
 
-Future <void> signInWithEmailAndPassword({
-  required String email,
-  required String password,
-}) async{
-  await _firebaseAuth.signInWithEmailAndPassword(
-    email:email,
-    password:  password,
+// Sign in with email and password
+  Future<User?> signInWithEmail(String email, String password) async {
+    try {
+      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
       );
+      return result.user;
+    } catch (e) {
+      print("Failed to create user: $e");
+      return null;
+    }
+  }
 
-}
-
-Future<void> createUserWithEmailAndPassword({
-  required String email,
-  required String password,
-}) async{
-  await _firebaseAuth.createUserWithEmailAndPassword(
-    email:email,
-    password:  password,
+  // Register with email and password
+  Future<User?> registerWithEmail(String email, String password) async {
+    try {
+      UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
+      return result.user;
+    } catch (e) {
+      print("Registration error: $e");
+      return null;
+    }
+  }
 
-}
-Future<void> signOut() async{
-  await _firebaseAuth.signOut();
-}
-
-
+  // Sign out
+  Future<void> signOut() async {
+     try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      print("Sign-out error: $e");
+    }
+  }
 }

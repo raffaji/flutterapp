@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'Pages/widget_tree.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_1/Pages/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:test_1/Pages/home_page.dart';
 import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,17 +18,26 @@ import 'package:test_1/UI/bloc_ui.dart';
 void main() async {
   // Ensure Flutter initializes before loading Firebase and environment variables
   WidgetsFlutterBinding.ensureInitialized();
+
   // Initialize Firebase
-  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   // Load the .env file
   try {
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "/Users/raffayhassan/Documents/test_1/.env");
   } catch (e, stackTrace) {
     debugPrint("Error loading .env file: ${e.toString()} $stackTrace");
+  }
+
+  // Initialize shared preferences
+  try {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    // Optionally, you could set a default value or check if user data exists here
+    // Example: prefs.setString('defaultKey', 'defaultValue');
+  } catch (e) {
+    debugPrint("Error initializing shared preferences: ${e.toString()}");
   }
 
   runApp(MyApp());
@@ -49,10 +61,21 @@ class _MyAppState extends State<MyApp> {
             title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,
             theme: theme, // Use the current theme provided by ThemeCubit
-            home: DefaultTabController(
-              length: 2, // Number of tabs
-              child: WeatherPage(),
-              
+            home: StreamBuilder<User?>(
+              stream: Auth().authStatechanges, // Listen to the authentication state changes
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator()); // Show loading indicator while waiting
+                }
+
+                if (snapshot.hasData) {
+                  // User is signed in
+                  return WeatherPage(); // Navigate to your authenticated home page
+                } else {
+                  // User is not signed in
+                  return HomeScreen(); // Replace with your login/register page
+                }
+              },
             ),
           );
         },
@@ -60,7 +83,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
 
@@ -80,8 +102,19 @@ class WeatherPage extends StatelessWidget {
                   : Icons.light_mode,
             ),
           ),
-        ],
-      ),
+       IconButton(
+          onPressed: ()  {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>HomeScreen ()),
+            );
+          },
+          icon: const Icon(Icons.logout),
+          tooltip: 'Logout',
+        ),
+      ],
+    ),
+
       body: Column(
         children: [
           Container(
