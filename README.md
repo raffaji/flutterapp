@@ -1,16 +1,12 @@
 # test_1
 
-A new Flutter project.
+Flutter Weather App
+A simple and elegant weather application built using Flutter, providing real-time weather updates along with a secure login page. The app demonstrates the use of both Cubit and Bloc architecture for effective state management and easy maintenance.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Features
+User Authentication: Login page to access weather data.
+Real-Time Weather Updates: Fetches and displays current weather conditions for a specified location.
+City Search: Allows users to search for weather information by city.
+Dark Mode: Supports dark mode, managed by Cubit.
+Responsive UI: Adapts seamlessly across various screen sizes.
+State Management: Built using both Cubit and Bloc architecture to handle different parts of the app efficiently.
