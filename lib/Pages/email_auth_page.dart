@@ -18,8 +18,8 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
   Future<void> sendSignInLink() async {
     String emailAuth = _email;
 
-    var acs = ActionCodeSettings(
-      url: 'https://www.example.com/finishSignUp?cartId=1234',
+   var acs = ActionCodeSettings(
+      url: 'https://sample-weather-ai-app.firebaseapp.com',
       handleCodeInApp: true,
       iOSBundleId: 'com.example.ios',
       androidPackageName: 'com.example.android',
@@ -59,9 +59,12 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
+            Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
               onChanged: (value) => _email = value,
               decoration: InputDecoration(labelText: 'Enter your email'),
+            ),
             ),
             ElevatedButton(
               onPressed: sendSignInLink,

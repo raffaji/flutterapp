@@ -24,15 +24,16 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Load the .env file
-  try {
-    await dotenv.load(fileName: "/Users/raffayhassan/Documents/test_1/.env");
-  } catch (e, stackTrace) {
-    debugPrint("Error loading .env file: ${e.toString()} $stackTrace");
-  }
+   //Load the .env file
+ try {
+  await dotenv.load(fileName: "/Users/raffayhassan/Documents/test_1/.env");
+   } catch (e, stackTrace) {
+     debugPrint("Error loading .env file: ${e.toString()} $stackTrace");
+   }
 
   // Initialize shared preferences
   try {
+    // ignore: unused_local_variable
     SharedPreferences preferences = await SharedPreferences.getInstance();
     // Optionally, you could set a default value or check if user data exists here
     // Example: prefs.setString('defaultKey', 'defaultValue');

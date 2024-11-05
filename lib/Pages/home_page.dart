@@ -68,25 +68,6 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Register'),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                User? user = await _authService.registerWithEmail(
-                  _emailController.text,
-                  _passwordController.text,
-                );
-                if (user != null) {
-                  // Save user email to shared preferences
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('email', _emailController.text);
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WeatherPage()), // Replace with your target screen
-                  );
-                }
-              },
-              child: Text('Register'),
-            ),
             SizedBox(height: 20),
             // Button to navigate to EmailAuthPage
             ElevatedButton(
