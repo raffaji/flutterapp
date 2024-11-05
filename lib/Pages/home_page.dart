@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                   );
                 }
               },
-              child: Text('Register'),
+              child: Text('Sign up'),
             ),
             SizedBox(height: 20),
             // Button to navigate to EmailAuthPage
